@@ -28,9 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     enableTime: true,
     time_24hr: true,
     minuteIncrement: 1,
+    defaultDate: "today",
     onClose(selectedDates) {
       userSelectedDate = selectedDates[0];
-    
+
       const now = new Date();
       const startButton = document.querySelector('[data-start]');
 
@@ -56,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
       clearInterval(countdownInterval);
       updateTimerUI(0);
     } else {
-      const { days, hours, minutes, seconds } = convertMs(timeDifference);
       updateTimerUI(timeDifference);
     }
   }, 1000);

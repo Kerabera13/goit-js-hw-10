@@ -24,15 +24,18 @@ function convertMs(ms) {
 document.addEventListener('DOMContentLoaded', () => {
   let userSelectedDate;
 
+  // Get the current date and time
+  const now = new Date();
+
+  // Initialize flatpickr with the current date and time
   const datetimePicker = flatpickr("#datetime-picker", {
     enableTime: true,
     time_24hr: true,
     minuteIncrement: 1,
-    defaultDate: "today",
+    defaultDate: now, // Set the default date to the current date and time
     onClose(selectedDates) {
       userSelectedDate = selectedDates[0];
 
-      const now = new Date();
       const startButton = document.querySelector('[data-start]');
 
       if (userSelectedDate <= now) {
@@ -48,24 +51,18 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   });
 
- document.querySelector('[data-start]').addEventListener('click', () => {
-  const countdownInterval = setInterval(() => {
-    const now = new Date();
-    const timeDifference = userSelectedDate - now;
+  document.querySelector('[data-start]').addEventListener('click', () => {
+    const updateTimeInterval = setInterval(() => {
+      updateTimerUI();
+    }, 1000);
+  });
 
-    if (timeDifference <= 0) {
-      clearInterval(countdownInterval);
-      updateTimerUI(0);
-    } else {
-      updateTimerUI(timeDifference);
-    }
-  }, 1000);
-});
+  function updateTimerUI() {
+    const currentTime = new Date();
+    const timeDifference = userSelectedDate - currentTime;
 
-  function updateTimerUI(ms) {
-    const { days, hours, minutes, seconds } = convertMs(ms);
+    const { hours, minutes, seconds } = convertMs(timeDifference);
 
-    document.querySelector('[data-days]').textContent = addLeadingZero(days);
     document.querySelector('[data-hours]').textContent = addLeadingZero(hours);
     document.querySelector('[data-minutes]').textContent = addLeadingZero(minutes);
     document.querySelector('[data-seconds]').textContent = addLeadingZero(seconds);
